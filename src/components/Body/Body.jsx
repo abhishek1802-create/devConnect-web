@@ -15,7 +15,7 @@ const Body = () => {
   const { user } = userData;
 
   const fetchUserData = async () => {
-    if (!user) {
+    if (user) {
       return;
     }
 
