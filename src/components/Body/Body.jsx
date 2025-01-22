@@ -1,43 +1,40 @@
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import React from "react";
 import Navbar from "../Navbar/Navbar";
-import { Outlet } from "react-router-dom";
-import Footer from "../Footer/Footer";
+import { Outlet, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { addUser } from "../../slice/userSlice";
-import { BASE_URL } from "../../utils/constants";
 
 const Body = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const userData = useSelector((state) => state.user);
-  const { user } = userData;
 
-  const fetchUserData = async () => {
-    if (user) {
+  const fetchUser = async () => {
+    if (userData) {
       return;
     }
 
     try {
-      const res = await axios.get(BASE_URL + "/profile", {
+      const response = await axios.get("http://localhost:7777/profile", {
         withCredentials: true,
       });
-      dispatch(addUser(res.data));
-    } catch (error) {
+      dispatch(addUser(response.data));
+    } catch (err) {
       navigate("/login");
+      console.log(err);
     }
   };
 
   useEffect(() => {
-    fetchUserData();
+    fetchUser();
   }, []);
 
   return (
     <div>
       <Navbar />
       <Outlet />
-      {/* <Footer /> */}
     </div>
   );
 };
